@@ -30,7 +30,7 @@ public class ChatbotAppController
 		applicationView = new ChatbotView(this);
 		appFrame = new ChatbotFrame(this);
 		mySillyChatbot = new Chatbot("Alonso");
-		startMessage = "Welcome to the " + mySillyChatbot.getName() + "chatbot. What is your name?";
+		startMessage = "Welcome to the " + mySillyChatbot.getName() + " chatbot. What is your name?";
 		quitMessage = "Goodbye cruel user :(";
 	}
 	
