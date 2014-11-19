@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * The Chatbot model class. Used for checking and manipulating Strings.
  * @author Rachel Goodliffe
- * @version 1.2 10/9/14
+ * @version 1.4 11/11/14 Update processText and added a checker
  */
 
 public class Chatbot 
@@ -14,6 +14,7 @@ public class Chatbot
 	private String name;
 	private String contentArea;
 	private int chatCount;
+	private ChatbotUser myUser;
 	
 	/**
 	 * Creates a Chatbot object with supplied name and initializes the current number of chats to zero.
@@ -22,54 +23,160 @@ public class Chatbot
 	public Chatbot(String name)
 	{
 		memeList = new ArrayList<String>();
+		userInputList = new ArrayList<String>();
 		this.name = name;
 		contentArea = "";
 		chatCount = 0;
+		myUser = newChatbotUser();
 		fillTheMemeList();
 	}
 	
+	
+	private ChatbotUser newChatbotUser() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private ArrayList<String> userInputList;
 	
 	public String processText(String currentInput)
 	{
 		String result = "";
 		
-		int randomPosition = (int) (Math.random() * 3);
-		if(currentInput != null)
+		if (getChatCount() < 5)
 		{
+			result = introduceUser(currentInput);
+		}
+		else if(currentInput != null && currentInput.length() >0)
+		{
+			result = randomChatConversation(currentInput);
+		}
+			
+		{
+			result = "Use words!";
+			chatCount--;
+		}
+		updateChatCount();
+		return result;
+	}
+	
+	private String introduceUser(String input)
+	{
+		String userQuestion = "";
+		int x;
 		
-			if(randomPosition == 0)
+		if(getChatCount() < 5)
 		{
-			if(stringLengthChecker(currentInput))
+			
+			if(getChatCount() == 0)
 			{
-				result = "too long";
+				myUser.setUserName(input);
+				userQuestion = "Good name" + myUser.getUserName() + "How old are you?";
+			}
+			else if(getChatCount() == 1)
+			{
+				int userAge = Integer.parseInt(input);
+				myUser.setAge(userAge);
+				userQuestion = "You're older than a tree! " +myUser.getUserName() + "how much do you weigh?";
+			}
+			//continue for other user into fields
+		}
+		return userQuestion;
+	}
+	
+	private String randomChatConversation(String input)
+	{
+		String conversation = "";
+		int randomPosition = (int) (Math.random() * 6);
+		
+		if (randomPosition == 0)
+		{
+			if(stringLengthChecker(input))
+			{
+				conversation = "too long";
 			}
 			else
 			{
-				result = "too short";
+				conversation = "too short";
 			}
 		}
 		else if(randomPosition == 1)
 		{
 			//content checker here
 		}
-		else
+		else if(randomPosition == 2)
 		{
-			if(memeChecker(currentInput))
+			if(memeChecker(input))
 			{
-				result = "Wow, " + currentInput + " is a meme. Wahoo!";
+				conversation = "Wow, " + input + " is a meme. Wahoo!";
 			}
 			else
 			{
-				result = "Not a meme, try again";
+				conversation = "Not a meme, try again";
 			}	
 		}
+		else if( randomPosition == 3)
+		{
+			//talk about person here :D
+		}
+		else if( randomPosition == 4)
+		{
+			//add to our list
+			userInputList.add(input);
+			conversation = "Thank you for the comment";
 		}
 		else
 		{
-			result = "Use words!";
+			if(userInputChecker(input))
+			{
+				conversation = "That was nice - you removed it from the list";
+			}
+			else
+			{
+				conversation = "that wasn't in the conversation before";
+			}
 		}
 		
-		return result;
+		return conversation;
+	}
+	
+	private String userTopic(String userInput)
+	{
+		String userBasedResponse = "";
+		
+		int randomUserTopic = (int) (Math.random() * 6);
+		
+		switch(randomUserTopic)
+		{
+			case 1:
+				userBasedResponse = myUser.getAge() + " TATTOOOOOOOOOOOOOS";
+				break;
+			case 0:
+				userBasedResponse = myUser.getAge() + " is a silly name :P";
+				break;
+			default:
+				userBasedResponse = myUser.getAge() + " is suuuuuuuuuuuuuuuper old";
+				break;
+		}
+		return userBasedResponse;
+	}
+	
+	private boolean userInputChecker(String userInput)
+	{
+		boolean matchesInput = false;
+		
+		for(int loopCount = 0; loopCount < userInputList.size(); loopCount++)
+		{
+			if(userInput.equalsIgnoreCase(userInputList.get(loopCount)))
+			{
+				matchesInput = true;
+				userInputList.remove(loopCount);
+				loopCount--;
+			}
+		}
+		
+		return matchesInput;
 	}
 	
 	
@@ -187,5 +294,7 @@ public class Chatbot
 		
 		return okToQuit;
 	}
+	
+	
 	
 }
