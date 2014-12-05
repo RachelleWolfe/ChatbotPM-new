@@ -27,19 +27,28 @@ public class Chatbot
 		this.name = name;
 		contentArea = "";
 		chatCount = 0;
-		myUser = newChatbotUser();
+		myUser = new ChatbotUser();
 		fillTheMemeList();
 	}
 	
-	
+	/**
+	 * Opens the conversation window
+	 * @return a new chatbot user
+	 */
 	private ChatbotUser newChatbotUser() 
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	/**
+	 * imports the different options for speaking
+	 */
 	private ArrayList<String> userInputList;
-	
+	/**
+	 * Letter count less than 5
+	 * @param currentInput
+	 * @return input
+	 */
 	public String processText(String currentInput)
 	{
 		String result = "";
@@ -52,39 +61,60 @@ public class Chatbot
 		{
 			result = randomChatConversation(currentInput);
 		}
-			
+		else 	
 		{
 			result = "Use words!";
-			chatCount--;
 		}
 		updateChatCount();
 		return result;
 	}
-	
+	/**
+	 * reply to 'hello'
+	 * @param input
+	 * @return the result
+	 */
 	private String introduceUser(String input)
 	{
 		String userQuestion = "";
 		int x;
 		
-		if(getChatCount() < 5)
+		if(getChatCount() == 0)
 		{
-			
-			if(getChatCount() == 0)
-			{
-				myUser.setUserName(input);
-				userQuestion = "Good name" + myUser.getUserName() + "How old are you?";
-			}
-			else if(getChatCount() == 1)
-			{
-				int userAge = Integer.parseInt(input);
-				myUser.setAge(userAge);
-				userQuestion = "You're older than a tree! " +myUser.getUserName() + "how much do you weigh?";
-			}
-			//continue for other user into fields
+			myUser.setUserName(input);
+			userQuestion = "Good name " + myUser.getUserName() + ". How old are you?";
 		}
+		else if(getChatCount() == 1)
+		{
+			int userAge = Integer.parseInt(input);
+			myUser.setAge(userAge);
+			userQuestion = "You're older than a tree, " +myUser.getUserName() + "! How much do you weigh?";
+		}
+		else if(getChatCount() == 2)
+		{
+			double userWeight = Double.parseDouble(input);
+			myUser.setWeight(userWeight);
+			userQuestion = "You're really light " +myUser.getUserName() + ". What is your favorite music?";
+		}
+		else if(getChatCount() == 3)
+		{
+			boolean lovesMusic = Boolean.parseBoolean(input);
+			myUser.setLovesMusic(lovesMusic);
+			userQuestion = "That's a good group " +myUser.getUserName() + "! Do you play piano?";
+		}
+		else 
+		{
+			boolean playsPiano = Boolean.parseBoolean(input);
+			myUser.setPlaysPiano(playsPiano);
+			userQuestion = "That's awesome " +myUser.getUserName() + ". What else would you like to talk about?";
+		}
+		//continue for other user into fields		
 		return userQuestion;
 	}
-	
+	/**
+	 * response for short conversations
+	 * @param input
+	 * @return
+	 */
 	private String randomChatConversation(String input)
 	{
 		String conversation = "";
@@ -125,9 +155,19 @@ public class Chatbot
 			//add to our list
 			userInputList.add(input);
 			conversation = "Thank you for the comment";
+		
 		}
-		else
+		else if(randomPosition ==5)
 		{
+			if(mashChecker(input))
+			{
+				conversation = mashingDetected(input);
+			}
+			else
+			{
+				conversation = noMashingDetected(input);
+			}
+
 			if(userInputChecker(input))
 			{
 				conversation = "That was nice - you removed it from the list";
@@ -140,7 +180,58 @@ public class Chatbot
 		
 		return conversation;
 	}
-	
+	/**
+	 * Adds substrings that are added over and over again
+	 * @param input string Mashing Detected
+	 * @return mashed
+	 */
+	private String mashingDetected(String input)
+	{
+		String mashed = "";
+		
+		mashed = input.substring(input.length()/2);
+		mashed += input.substring(input.length()/2);
+		mashed += input.substring(input.length()/2);
+		mashed += input.substring(input.length()/2);
+		
+		return mashed;
+	}
+	/**
+	 * Reply to when mashing does not happen to keyboard
+	 * @param input
+	 * @return
+	 */
+	private String noMashingDetected(String input)
+	{
+		String noMashing = "Thank you for not mashing your keyboard";
+		
+		{
+			noMashing += input.substring(input.length()/3, input.length()/2);
+		}
+		return noMashing;
+		
+	}
+	/**
+	 * Checks the mashing
+	 * @param userInput
+	 * @return false if not mashing
+	 */
+	private boolean mashChecker(String userInput)
+	{
+		boolean isMashing = false;
+		
+		if(userInput.indexOf("asds") > -1)
+		{
+			isMashing = true;
+		}
+		
+		return isMashing;
+	}
+	/**
+	 * Response given determined by users interests
+	 * @param userInput
+	 * @return
+	 */
 	private String userTopic(String userInput)
 	{
 		String userBasedResponse = "";
@@ -161,7 +252,11 @@ public class Chatbot
 		}
 		return userBasedResponse;
 	}
-	
+	/**
+	 * gives the user input
+	 * @param userInput
+	 * @return
+	 */
 	private boolean userInputChecker(String userInput)
 	{
 		boolean matchesInput = false;
@@ -253,7 +348,11 @@ public class Chatbot
 		
 		return isAMeme;
 	}
-	
+	/**
+	 * checks the length of the response
+	 * @param input
+	 * @return the response
+	 */
 	private boolean stringLengthChecker(String input)
 	{
 		boolean isTooLong = false;
@@ -266,7 +365,11 @@ public class Chatbot
 		return isTooLong;
 	}
 	
-	
+	/**
+	 * Checks the content of the string
+	 * @param input
+	 * @return the completed content
+	 */
 	private boolean contentChecker(String input)
 	{
 		boolean isContent = false;
@@ -279,7 +382,7 @@ public class Chatbot
 	}
 	
 	/**
-	 * 
+	 * checks to see if the quit took place
 	 * @param input of the string.
 	 * @return Quits the checker
 	 */

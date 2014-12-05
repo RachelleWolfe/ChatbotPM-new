@@ -14,13 +14,18 @@ public class ChatbotFrame extends JFrame
 	 * Reference for the CHatbotPanel of the GUI
 	 */
 	private ChatbotPanel basePanel;
-	
+	/**
+	 * Gives the chatbot its basic frame
+	 * @param baseController
+	 */
 	public ChatbotFrame(ChatbotAppController baseController) 
 	{
 		basePanel = new ChatbotPanel(baseController);
 		setupFrame();
 	}
-	
+	/**
+	 * Sets up the size of the frame
+	 */
 	private void setupFrame()
 	{
 		this.setContentPane(basePanel);

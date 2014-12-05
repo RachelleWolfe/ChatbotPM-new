@@ -25,7 +25,9 @@ public class ChatbotAppController
 	 */
 	private ChatbotFrame appFrame;
 	
-	
+	/**
+	 * produces the welcome message of the Chatbot
+	 */
 	public ChatbotAppController()
 	{
 		applicationView = new ChatbotView(this);
@@ -34,12 +36,17 @@ public class ChatbotAppController
 		startMessage = "Welcome to the " + mySillyChatbot.getName() + " chatbot. What is your name?";
 		quitMessage = "Goodbye cruel user :(";
 	}
-	
+	/**
+	 * Get's the chatbot
+	 * @return mySillyChatbot
+	 */
 	public Chatbot getMySillyChatbot()
 	{
 		return mySillyChatbot;
 	}
-	
+	/**
+	 * starts the program
+	 */
 	public void start()
 	{
 		
@@ -49,7 +56,9 @@ public class ChatbotAppController
 		//testPanel.showTextMessage(startMessage);
 		
 	}
-		
+	/*
+	 * brings the chatbot pop up window	
+	 */
 	public String getChatbotDialog(String input)
 	{
 		String result = "";
@@ -62,7 +71,9 @@ public class ChatbotAppController
 		
 		return result;
 	}
-	
+	/**
+	 * quits the app
+	 */
 	private void quit()
 	{
 		applicationView.showChatbotMessage(quitMessage);
